@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"> 
+		<title>公共聊天室</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://cdn.staticfile.org/axios/0.18.0/axios.js"></script>
+		<link rel="stylesheet" type="text/css" rev="stylesheet" href="asaichat.css">
+	</head>
+	<body>
+		<div id="app">
+			<div class="asaichat">
+				<div class="asaichat-top">{{language.title}}<b>{{urlid}}</b><audio id="asaispeak" type="audio/mpeg" autoplay></audio>
+					<div class="chatshow">
+						<label for="id">{{language.formtips}}</label><input type="number" name="id" id="id" :maxlength="8" v-model="urlidx"
+						 @keyup.enter="chatshow()"><button @click="chatshow()">{{language.formshow}}</button>
+					</div>
+				</div>
+				<div class="asaichat-main">
+					<div class="asaichat-cr"></div>
+					<div v-for="(item,key) in chatobj" :key="key" :class="fid==item.i?'asaichat-main-my':'asaichat-main-you'" @click="itemspeak(item)">
+						<div class="asaichat-main-des" :title="item.i">
+							<div>{{item.m}}</div>{{item.t}}
+						</div>{{item.v}}
+					</div>
+					<div class="asaichat-cr"></div>
+				</div>
+				<div class="asaichat-form">
+					<div class="asaichat-ge"></div>
+					<div class="asaichat-form-name"><input type="text" :maxlength="language.sizeming" :placeholder="language.formmings"
+						 v-model="fming"></div>
+					<div class="asaichat-ge"></div>
+					<div class="asaichat-form-word"><input type="text" ref="say" :maxlength="language.sizeval" :placeholder="language.formword"
+						 v-model="fval" @keyup.enter="say()"></div>
+					<div class="asaichat-ge"></div>
+					<div class="asaichat-form-btn">
+						<div class="asaichat-speak" v-show="speaknow" :title="language.wordspeak">
+							<div class="asaichat-speak-ico"></div>
+						</div><button @click="say()">{{language.formbtn}}</button>
+					</div>
+					<div class="asaichat-ge"></div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			new Vue({
+				el: '#app',
+				data() {
+					return {
+						chaturl: 'http://lts.780.pub/?',
+						language: {
+							sizeming: 8,
+							sizeval: 100,
+							title: '公共聊天室',
+							formtips: '编号',
+							formshow: '进入',
+							formsizeerr: '名不要长过8，话不能长过100。',
+							formming: '游客',
+							formbtn: '发送',
+							formmings: '起个名',
+							formword: '请输入要说的话',
+							formempty: '有名、有话，才能说！',
+							wordspeak: '有人正在说话',
+							wordsay: '说',
+							wordmore: '我说：还有好多人说话了，我就不一一朗读了！'
+						},
+						localsave: {
+							id: 'lid',
+							ming: 'lming',
+							urlid: 'lurlid',
+							key: 'lkey',
+							obj: 'lobj'
+						},
+						urlid: 9,
+						urlidx: 0,
+						fid: 108,
+						fming: '',
+						fval: '',
+						chatclock: null,
+						chatkey: 0,
+						chatobj: {},
+						speaknow: false
+					}
+				},
+				created() {
+					this.urlidx = parseInt(localStorage.getItem(this.localsave.urlid));
+					if (this.urlidx > 0) {
+						this.urlid = this.urlidx;
+					} else {
+						this.urlidx = this.urlid;
+					}
+					this.localage();
+				},
+				mounted() {
+					this.chatclock = this.chatfresh();
+				},
+				watch: {
+					chatkey: function() {
+						localStorage.setItem(this.localsave.key + '-' + this.urlid, this.chatkey);
+						if (this.chatkey > 0 && this.chatkey < 100) {
+							localStorage.setItem(this.localsave.obj + '-' + this.urlid, JSON.stringify(this.chatobj));
+						} else {
+							localStorage.setItem(this.localsave.obj + '-' + this.urlid, '');
+						}
+						this.scroll();
+					},
+					fming: function() {
+						localStorage.setItem(this.localsave.ming, this.fming);
+					},
+				},
+				methods: {
+					chataxios(url, ga, type, val = 0) {
+						let _this = this;
+						if (type == 8) { //添加
+							axios({
+									method: 'post',
+									url: url + ga + '/' + type,
+									data: val,
+									headers: {
+										'Content-Type': 'application/json;charset=UTF-8',
+									}
+								})
+								.then(response => {
+									return response.data;
+								})
+								.catch(error => {
+									return error;
+								});
+						} else { //获取
+							axios.get(url + ga + '/' + type + '/' + val)
+								.then(response => {
+									console.log(response.data, this.chatobj)
+									if (response.data.key != val && response.data != val) {
+										this.chatkey = response.data.key;
+										let chatobjurl = response.data.obj;
+										this.chatobj = Object.assign({}, this.chatobj, chatobjurl);
+										this.asaispeak(chatobjurl);
+									}
+								})
+								.catch(error => {
+									return error;
+								});
+						}
+					},
+					asaispeak(wordobj) {
+						let words = '.';
+						let wordnum = 0;
+						for (let key in wordobj) {
+							wordnum += 1;
+							if (wordnum < 10) {
+								words = words + wordobj[key].m + '.' + this.language.wordsay + '.' + wordobj[key].v + '.';
+							}
+						}
+						if (wordnum > 10 || words.lengh > 200) {
+							words = words + '.' + this.language.wordmore;
+						}
+						this.speak(words);
+					},
+					itemspeak(itemobj) {
+						let words = itemobj.m + '.' + this.language.wordsay + '.' + itemobj.v + '.';
+						this.speak(words);
+					},
+					speak(word) {
+						let sdom = document.getElementById("asaispeak");
+						sdom.src = 'http://tts.baidu.com/text2audio/text2audio?lan=zh&ie=UTF-8&spd=6&text=' + word;
+						if (sdom) {
+							this.speaknow = true;
+							sdom.loop = false;
+							let _this = this;
+							sdom.addEventListener('ended', function() {
+								_this.speaknow = false;
+							}, false);
+						}
+					},
+					chatshow() {
+						this.chatkey = 0;
+						this.chatobj = {};
+						this.urlid = this.urlidx;
+						localStorage.setItem(this.localsave.urlid, this.urlid);
+						this.localage();
+						this.getfocus();
+					},
+					localage() {
+						this.fid = localStorage.getItem(this.localsave.id);
+						if (!this.fid) {
+							this.fid = Date.now();
+							localStorage.setItem(this.localsave.id, this.fid);
+						}
+						this.fming = localStorage.getItem(this.localsave.ming);
+						if (!this.fming) {
+							this.fming = this.language.formming;
+						}
+						let localkey = parseInt(localStorage.getItem(this.localsave.key + '-' + this.urlid));
+						if (localkey) {
+							let localobj = localStorage.getItem(this.localsave.obj + '-' + this.urlid);
+							if (localobj) {
+								this.chatkey = localkey;
+								this.chatobj = JSON.parse(localobj);
+							}
+						}
+					},
+					chatfresh() {
+						let _this = this;
+						window.setInterval(function() {
+							if (!_this.speaknow) {
+								_this.chataxios(_this.chaturl, _this.urlid, 0, _this.chatkey);
+							}
+						}, 2000);
+					},
+					scroll() {
+						this.$nextTick(() => {
+							window.scrollTo({
+								left: 0,
+								top: 999999,
+								behavior: "smooth"
+							});
+							document.body.scrollTop = document.body.scrollHeight;
+						});
+					},
+					say() {
+						if (this.fval === '#clear') {
+							this.chatobj = {};
+							this.chatkey = 0;
+							localStorage.setItem(this.localsave.key + '-' + this.urlid, 0);
+							localStorage.setItem(this.localsave.obj + '-' + this.urlid, '');
+							this.fval = '';
+							this.getfocus();
+						} else if (this.fming.length > this.language.sizeming || this.fval.length > this.language.sizeval) {
+							alert(this.language.formsizeerr);
+						} else if (this.fming && this.fval) {
+							this.chatkey += 1;
+							let chatobjv = {
+								i: this.fid,
+								m: this.fming,
+								v: this.fval,
+								t: this.gettime()
+							};
+							this.chatobj[this.chatkey] = chatobjv;
+							this.fval = '';
+							this.chataxios(this.chaturl, this.urlid, 8, chatobjv);
+							this.scroll();
+						} else {
+							alert(this.language.formempty);
+						}
+						this.getfocus();
+					},
+					getfocus() {
+						this.$nextTick(() => {
+							this.$refs["say"].focus();
+						});
+					},
+					gettime() {
+						let myDate = new Date();
+						let year = myDate.getFullYear();
+						let month = myDate.getMonth() + 1;
+						let date = myDate.getDate();
+						let h = myDate.getHours();
+						let m = myDate.getMinutes();
+						let s = myDate.getSeconds();
+						return year + '-' + this.cvtime(month) + "-" + this.cvtime(date) + " " + this.cvtime(h) + ':' + this.cvtime(m) +
+							":" + this.cvtime(s);
+					},
+					cvtime(s) {
+						return s < 10 ? '0' + s : s;
+					}
+				},
+				beforeDestroy() {
+					window.clearInterval(this.chatclock);
+				}
+			});
+		</script>
+	</body>
+</html>

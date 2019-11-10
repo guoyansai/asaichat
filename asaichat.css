@@ -1,0 +1,259 @@
+:root {
+	--color1: #585858;
+	--color10: #cfb56a;
+	--color11: #e8dfc4;
+	--color12: #fffae8;
+	--color2: #d38546;
+}
+
+* {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+body {
+	position: relative;
+	font-size: 14px;
+	font-size: .875rem;
+	color: var(--color1);
+	background-color: var(--color12);
+}
+
+#asaispeak {
+	display: none;
+}
+
+.chatshow {
+	height: 100%;
+	float: right;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-weight: normal;
+}
+
+.chatshow>label {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 1.5rem;
+	font-size: 0.6rem;
+	padding: 0 0.6rem;
+	border-bottom: 0.1rem solid var(--color10);
+	border-top: 0.1rem solid var(--color10);
+	border-left: 0.1rem solid var(--color10);
+	color: var(--color1);
+}
+
+.chatshow>input {
+	width: 3rem;
+	height: 1.5rem;
+	line-height: 1.5rem;
+	font-size: 0.6rem;
+	margin-right: 0.6rem;
+	text-align: center;
+	border-bottom: 0.1rem solid var(--color10);
+	border-top: 0.1rem solid var(--color10);
+	border-right: 0.1rem solid var(--color10);
+	background-color: var(--color12);
+	color: var(--color2);
+}
+
+.chatshow>button {
+	width: 3rem;
+	height: 1.5rem;
+	font-size: 0.6rem;
+	color: var(--color12);
+	background-color: var(--color2);
+	border-bottom: 0.1rem solid var(--color2);
+	border-top: 0.1rem solid var(--color2);
+	border-radius: 1rem;
+}
+
+.asaichat {
+	width: 100%;
+}
+
+.asaichat>div {
+	width: 100%;
+}
+
+.asaichat-cr {
+	height: 3rem;
+	clear: both;
+}
+
+.asaichat-main>div {
+	clear: both;
+	color: var(--color1);
+}
+
+.asaichat-main-des {
+	margin: -1.5rem -1rem 0 -1rem;
+	height: 1.5rem;
+	font-size: 0.5rem;
+	line-height: 0.5rem;
+	color: var(--color10);
+}
+
+.asaichat-main-des>div {
+	padding: 0 0.2rem;
+	color: var(--color2);
+}
+
+.asaichat-main-you {
+	float: left;
+	text-align: left;
+	background-color: var(--color12);
+	margin: 1rem 2rem 1rem 1rem;
+	padding: 0.5rem 1rem;
+	border-radius: 0 1rem 1rem 1rem;
+	border: 0.08rem solid var(--color10);
+	box-shadow: 0.1rem 0.2rem 0.3rem var(--color10);
+}
+
+.asaichat-main-you>.asaichat-main-des {
+	text-align: left;
+}
+
+.asaichat-main-you>.asaichat-main-des>div {
+	float: left;
+}
+
+.asaichat-main-my {
+	float: right;
+	text-align: left;
+	background-color: var(--color11);
+	margin: 1rem 1rem 1rem 2rem;
+	padding: 0.5rem 1rem;
+	border-radius: 1rem 0 1rem 1rem;
+	border: 0.08rem solid var(--color10);
+	box-shadow: -0.1rem 0.2rem 0.3rem var(--color10);
+}
+
+.asaichat-main-my>.asaichat-main-des {
+	text-align: right;
+}
+
+.asaichat-main-my>.asaichat-main-des>div {
+	float: right;
+}
+
+.asaichat-ge {
+	width: 0.2rem;
+}
+
+
+.asaichat-top {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0 1rem;
+	height: 2rem;
+	overflow: hidden;
+	line-height: 2rem;
+	font-size: 1rem;
+	font-weight: bold;
+	background-color: var(--color11);
+	box-shadow: 0 0.1rem 2rem var(--color10);
+}
+
+.asaichat-top>b {
+	margin-left: 0.5rem;
+	color: var(--color2);
+}
+
+.asaichat-form {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	height: 2rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	background-color: var(--color11);
+	box-shadow: 0 0.1rem 2rem var(--color10);
+}
+
+.asaichat-form-name,
+.asaichat-form-btn {
+	width: 5rem;
+}
+
+.asaichat-form-word {
+	flex-grow: 1;
+}
+
+.asaichat-form-name>input {
+	background-color: var(--color11);
+	text-align: center;
+	color: var(--color2);
+}
+
+.asaichat-form-btn {
+	position: relative;
+	background-color: var(--color2);
+}
+
+
+.asaichat-form-word>input {
+	padding: 0 0.3rem;
+	background-color: var(--color12);
+	color: var(--color1);
+}
+
+.asaichat-form-name>input,
+.asaichat-form-word>input,
+.asaichat-form-btn>button {
+	width: 100%;
+	height: 1.8rem;
+}
+
+.asaichat-form-btn>button {
+	background-color: var(--color2);
+	color: var(--color12);
+}
+
+.asaichat-speak {
+	cursor: pointer;
+	position: absolute;
+	width: 100%;
+	top: -2rem;
+	left: 0px;
+	display: flex;
+	justify-content: center;
+	align-content: flex-end;
+}
+
+.asaichat-speak-ico {
+	color: var(--color12);
+	border-radius: 50%;
+	width: 1rem;
+	height: 1rem;
+	animation: speak 3s;
+}
+
+@keyframes speak {
+
+	0%,
+	100% {
+		background-color: var(--color2);
+	}
+
+	25% {
+		background-color: var(--color10);
+	}
+
+	50% {
+		background-color: var(--color1);
+	}
+
+	75% {
+		background-color: var(--color11);
+	}
+}
