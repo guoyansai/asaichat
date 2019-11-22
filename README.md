@@ -1,4 +1,5 @@
 # asaichat
+### 演示网址：http://lt.780.pub/
 - 源代码模型：html5+css+vue+JavaScript+PHP+txt+json
 - 功能介绍：
 1. localstore本地缓存；

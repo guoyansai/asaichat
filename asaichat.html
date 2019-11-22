@@ -98,7 +98,7 @@
                 this.readlocaldb(this.urlid);
             },
             mounted() {
-                console.log(localStorage.getItem(this.localsave.key + '-' + this.urlid) + '=' + this.chatkey, localStorage.getItem(this.localsave.obj + '-' + this.urlid), this.chatobj)
+                //console.log(666.6,localStorage.getItem(this.localsave.key + '-' + this.urlid) + '=' + this.chatkey, localStorage.getItem(this.localsave.obj + '-' + this.urlid), this.chatobj)
                 this.chatclock = this.chatfresh();
             },
             watch: {
@@ -111,7 +111,7 @@
             },
             methods: {
                 chataxios(url, ga, type, val = 0) {
-                    console.log(url, ga, type, val)
+                    //console.log(666.6,url, ga, type, val)
                     if (type == 8) { //添加
                         axios({
                                 method: 'post',
@@ -136,6 +136,7 @@
                                     if (!chatobjurl[this.chatkey].o || this.fid == chatobjurl[this.chatkey].o || this.fid == chatobjurl[this.chatkey].i) {
                                         this.chatobj = Object.assign({}, this.chatobj, chatobjurl);
                                         this.asaispeak(chatobjurl);
+                                        this.scroll();
                                     }
                                 }
                             })
@@ -167,7 +168,7 @@
                     }
                 },
                 writelocaldb(lid) { //write localStorage
-                    console.log(this.chatkey, this.chatobj)
+                    //console.log(666.6,this.chatkey, this.chatobj)
                     if (this.chatkey > 0 && this.chatkey % 100 != 0) {
                         localStorage.setItem(this.localsave.key + '-' + lid, this.chatkey);
                         localStorage.setItem(this.localsave.obj + '-' + lid, JSON.stringify(this.chatobj));
