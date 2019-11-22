@@ -34,10 +34,15 @@ if ($g_u1 == 8) { //添加
     if ($chatkey > $g_u2) {
         if (file_exists($g_db . $g_u0 . ".json")) {
             $chatjson = json_decode('{' . file_get_contents($g_db . $g_u0 . ".json") . '}', true);
+            $j = 0;
             for ($i = $g_u2 + 1; $i <= $chatkey; $i++) {
-                $chatjsonlz = $chatjson[$i];
-                if ($chatjsonlz) {
-                    if ($i == $g_u2 + 1) {
+                $chatjsonlz = '';
+                if (!empty($chatjson[$i])) {
+                    $chatjsonlz = $chatjson[$i];
+                    $j = $j + 1;
+                };
+                if ($chatjsonlz != '') {
+                    if ($j = 1) {
                         $outval = '"' . $i . '":' . json_encode($chatjsonlz);
                     } else {
                         $outval = $outval . ',"' . $i . '":' . json_encode($chatjsonlz);
