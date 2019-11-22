@@ -98,6 +98,7 @@
                 this.readlocaldb(this.urlid);
             },
             mounted() {
+                console.log(localStorage.getItem(this.localsave.key + '-' + this.urlid) + '=' + this.chatkey, localStorage.getItem(this.localsave.obj + '-' + this.urlid), this.chatobj)
                 this.chatclock = this.chatfresh();
             },
             watch: {
@@ -110,6 +111,7 @@
             },
             methods: {
                 chataxios(url, ga, type, val = 0) {
+                    console.log(url, ga, type, val)
                     if (type == 8) { //添加
                         axios({
                                 method: 'post',
@@ -165,14 +167,14 @@
                     }
                 },
                 writelocaldb(lid) { //write localStorage
-                    if (this.chatkey > 0 && this.chatkey < 100) {
+                    console.log(this.chatkey, this.chatobj)
+                    if (this.chatkey > 0 && this.chatkey % 100 != 0) {
                         localStorage.setItem(this.localsave.key + '-' + lid, this.chatkey);
                         localStorage.setItem(this.localsave.obj + '-' + lid, JSON.stringify(this.chatobj));
                     } else {
                         localStorage.setItem(this.localsave.key + '-' + lid, 1);
                         localStorage.setItem(this.localsave.obj + '-' + lid, '');
                     }
-                    this.scroll();
                 },
                 asaispeak(wordobj) {
                     let words = '.';
@@ -264,7 +266,6 @@
                         this.chatkey += 1;
                         this.fval = '';
                         this.chataxios(this.chaturl, this.urlid, 8, chatobjv);
-                        this.scroll();
                     } else {
                         alert(this.language.formempty);
                     }
@@ -273,6 +274,7 @@
                 getfocus() {
                     this.$nextTick(() => {
                         this.$refs["say"].focus();
+                        this.scroll();
                     });
                 },
                 gettime() {

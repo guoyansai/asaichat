@@ -42,7 +42,7 @@ if ($g_u1 == 8) { //添加
                     $j = $j + 1;
                 };
                 if ($chatjsonlz != '') {
-                    if ($j = 1) {
+                    if ($j == 1) {
                         $outval = '"' . $i . '":' . json_encode($chatjsonlz);
                     } else {
                         $outval = $outval . ',"' . $i . '":' . json_encode($chatjsonlz);

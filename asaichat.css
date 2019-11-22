@@ -1,9 +1,9 @@
 :root {
-    --color1: #585858;
-    --color10: #cfb56a;
-    --color11: #e8dfc4;
-    --color12: #fffae8;
-    --color2: #d38546;
+    --color1: #180c0c;
+    --color10: #c1cad9;
+    --color11: #eff4fd;
+    --color12: #fbfdfa;
+    --color2: #9ea6b9;
 }
 
 * {
@@ -113,7 +113,7 @@ body {
 
 .asaichat-main-des>div>i {
     margin: 0 0.2rem;
-    color: var(--color1);
+    color: var(--color10);
     font-style: normal;
 }
 
